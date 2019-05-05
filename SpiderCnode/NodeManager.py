@@ -15,22 +15,25 @@ class NodeManager():
         url_manager = UrlManger()
         url_manager.add_new_urls(root_url)
         while True:
-            while url_manager.has_new_url():
-                new_url = url_manager.get_new_url()
-                url_q.put(new_url)
-                print('old_url=',url_manager.old_url_size())
-                if url_manager.old_url_size() > 2000 :
-                    url_q.put('end')
-                    print('控制节点发起结束通知')
-                    url_manager.save_progress('new_url.txt',url_manager.new_urls)
-                    url_manager.save_progress('old_url.txt',url_manager.old_urls)
-                    return
+            try:
                 try:
                     if not conn_q.empty():
                         urls = conn_q.get()
                         url_manager.add_new_urls(urls)
                 except BaseException:
                     time.sleep(0.1)
+                new_url = url_manager.get_new_url()
+                url_q.put(new_url)
+                print('old_url=',url_manager.old_url_size())
+                if url_manager.old_url_size() > 2000 :
+                    url_q.put('end')
+                    url_q.put('end')
+                    print('控制节点发起结束通知')
+                    url_manager.save_progress('new_url.txt',url_manager.new_urls)
+                    url_manager.save_progress('old_url.txt',url_manager.old_urls)
+                    return
+            except:
+                pass
 
     def result_solve_proc(self,result_q,conn_q,store_q):
         while True:

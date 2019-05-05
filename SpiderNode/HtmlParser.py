@@ -3,6 +3,7 @@ import re
 import urllib.parse
 from bs4 import BeautifulSoup
 import requests
+from HtmlDownloader import HtmlDownloader
 
 class HtmlParser():
     def parser(self,page_url,html_cont):
@@ -30,3 +31,4 @@ class HtmlParser():
         summary = soup.find('div',class_ = 'lemma-summary')
         data['summary'] = summary.get_text()
         return data
+
